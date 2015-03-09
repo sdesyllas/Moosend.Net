@@ -16,7 +16,7 @@ namespace Moosend.Net.Api
         /// <param name="email">(REQUIRED) The email address of the member</param>
         /// <param name="mailingListId">(REQUIRED) The ID of the mailing list to add the new member</param>
         /// <returns></returns>
-        Task<dynamic> GetSubscriberByEmail(string email, string mailingListId);
+        dynamic GetSubscriberByEmail(string email, string mailingListId);
 
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace Moosend.Net.Api
         /// <param name="name">(OPTIONAL) The name of the member</param>
         /// <param name="customFields"> (OPTIONAL) A list of name-value pairs that match the member's custom fields defined in the mailing list.</param>
         /// <returns>true if response was ok</returns>
-        Task<dynamic> AddSubscriber(string email, string mailingListId = "", string name = "", JObject customFields = null);
+        dynamic AddSubscriber(string email, string mailingListId = "", string name = "", JObject customFields = null);
 
         /// <summary>
         /// Unsubscribes a subscriber from the specified mailing list and the specified campaign. The subscriber is not deleted, but moved to the supression list. 
@@ -37,7 +37,7 @@ namespace Moosend.Net.Api
         /// <param name="mailingListId">(OPTIONAL) The ID of the mailing list to unsubscribe the subscriber from. If also omitted, the email address of the subscriber will be unsubscribed from all mailing lists.</param>
         /// <param name="campaignId">(OPTIONAL) The ID of the campaign from which the subscriber unsubscribed. It can be omitted if no such information is available.</param>
         /// <returns></returns>
-        Task<dynamic> Unsubscribe(string email, string mailingListId = "", string campaignId = "");
+        dynamic Unsubscribe(string email, string mailingListId = "", string campaignId = "");
 
         /// <summary>
         /// Removes a subscriber from the specified mailing list permanently (without moving to the supression list).
@@ -45,6 +45,6 @@ namespace Moosend.Net.Api
         /// <param name="email">(REQUIRED) The email address of the subscriber being searched.</param>
         /// <param name="mailingListId">(REQUIRED) The ID of the mailing list to search the subscriber in.</param>
         /// <returns></returns>
-        Task<dynamic> RemoveSubscriber(string email, string mailingListId = "");
+        dynamic RemoveSubscriber(string email, string mailingListId = "");
     }
 }

@@ -14,16 +14,16 @@ namespace Moosend.Net.Tests
         {
             using (ISubscribersWrapper subscribersWrapper = new SubscribersWrapper())
             {
-                Task<dynamic> subscriber = subscribersWrapper.GetSubscriberByEmail(email, listId);
-                var responseEmail = subscriber.Result.Context.Email.ToString();
-                var responseCode = subscriber.Result.Code.ToString();
+                var subscriber = subscribersWrapper.GetSubscriberByEmail(email, listId);
+                var responseEmail = subscriber.Context.Email.ToString();
+                var responseCode = subscriber.Code.ToString();
                 Assert.AreEqual("0", responseCode);
                 Assert.AreEqual(email, responseEmail);
-                Console.WriteLine(subscriber.Result);
+                Console.WriteLine(subscriber);
             }
         }
 
-        [TestCase("user1@moosend.com", "6dc7684b-7a20-4fdd-8654-9e5dac00a5fc", "Moosend test User 1")]
+        [TestCase("user2@moosend.com", "6dc7684b-7a20-4fdd-8654-9e5dac00a5fc", "Moosend test User 1")]
         public void AddSubscriber(string email, string mailistListId, string name)
         {
             JObject customFields = new JObject();
@@ -31,12 +31,12 @@ namespace Moosend.Net.Tests
             customFields["Country"] = "Greece";
             using (ISubscribersWrapper subscribersWrapper = new SubscribersWrapper())
             {
-                Task<dynamic> subscriber = subscribersWrapper.AddSubscriber(email, mailistListId, name, customFields);
-                var responseEmail = subscriber.Result.Context.Email.ToString();
-                var responseCode = subscriber.Result.Code.ToString();
+                var subscriber = subscribersWrapper.AddSubscriber(email, mailistListId, name, customFields);
+                var responseEmail = subscriber.Context.Email.ToString();
+                var responseCode = subscriber.Code.ToString();
                 Assert.AreEqual("0", responseCode);
                 Assert.AreEqual(email, responseEmail);
-                Console.WriteLine(subscriber.Result);
+                Console.WriteLine(subscriber);
             }
         }
 
@@ -45,11 +45,11 @@ namespace Moosend.Net.Tests
         {
             using (ISubscribersWrapper subscribersWrapper = new SubscribersWrapper())
             {
-                Task<dynamic> subscriber = subscribersWrapper.Unsubscribe(email, mailistListId);
+                var subscriber = subscribersWrapper.Unsubscribe(email, mailistListId);
                 Assert.IsNotNull(subscriber);
-                var responseCode = subscriber.Result.Code.ToString();
+                var responseCode = subscriber.Code.ToString();
                 Assert.AreEqual("0", responseCode);
-                Console.WriteLine(subscriber.Result);
+                Console.WriteLine(subscriber);
             }
         }
 
@@ -58,11 +58,11 @@ namespace Moosend.Net.Tests
         {
             using (ISubscribersWrapper subscribersWrapper = new SubscribersWrapper())
             {
-                Task<dynamic> subscriber = subscribersWrapper.RemoveSubscriber(email, mailistListId);
+                var subscriber = subscribersWrapper.RemoveSubscriber(email, mailistListId);
                 Assert.IsNotNull(subscriber);
-                var responseCode = subscriber.Result.Code.ToString();
+                var responseCode = subscriber.Code.ToString();
                 Assert.AreEqual("0", responseCode);
-                Console.WriteLine(subscriber.Result);
+                Console.WriteLine(subscriber);
             }
         }
     }

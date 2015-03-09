@@ -20,7 +20,7 @@ namespace Moosend.Net.Api
     {
         private readonly ILog _log = LogManager.GetLogger("Moosend.Net.Api.SubscribersWrapper");
 
-        public async Task<dynamic> GetSubscriberByEmail(string email, string mailingListId)
+        public dynamic GetSubscriberByEmail(string email, string mailingListId)
         {
             //GET : http://api.moosend.com/v2/subscribers/{MailingListID}/view.{xml|json}
             string webMethodUrl = String.Format("{0}/{1}/{2}/view.json?apikey={3}&Email={4}",
@@ -29,16 +29,16 @@ namespace Moosend.Net.Api
                 MoosendConfig.MoosendSettings.ApiKey, email);
             using (base.MoosendClient)
             {
-                HttpResponseMessage response = await MoosendClient.GetAsync(webMethodUrl);
+                HttpResponseMessage response = MoosendClient.GetAsync(webMethodUrl).Result;
                 _log.DebugFormat("Moosend Api call : {0}", response.RequestMessage);
                 _log.DebugFormat("Response : {0}", response.StatusCode);
-                dynamic subscriber = await response.Content.ReadAsAsync<dynamic>();
+                dynamic subscriber = response.Content.ReadAsAsync<dynamic>().Result;
                 _log.DebugFormat("Code:{0}, Error:{1}", subscriber.Code, subscriber.Error);
                 return subscriber;
             }
         }
 
-        public async Task<dynamic> AddSubscriber(string email, string mailingListId = "", string name = "", JObject customFields = null)
+        public dynamic AddSubscriber(string email, string mailingListId = "", string name = "", JObject customFields = null)
         {
             try
             {
@@ -57,11 +57,18 @@ namespace Moosend.Net.Api
                     // this work around is needed because moosend needs customfields as a simple string array like
                     // ["IsCustomer=yes","Country=USA"] and not 
                     // [{"IsCustomer" : "yes"}, {"Country"="USA"}]
-                    json.CustomFields = JsonHelper.CustomFieldsToJavascriptArray(customFields);
-                    HttpResponseMessage response = await MoosendClient.PostAsJsonAsync(webMethodUrl, json);
+                    if (customFields != null)
+                    {
+                        json.CustomFields = JsonHelper.CustomFieldsToJavascriptArray(customFields);
+                    }
+                    else
+                    {
+                        json.CustomFields = new List<string>();
+                    }
+                    HttpResponseMessage response = MoosendClient.PostAsJsonAsync(webMethodUrl, json).Result;
                     _log.DebugFormat("Moosend Api call : {0}", response.RequestMessage);
                     _log.DebugFormat("Response : {0}", response.StatusCode);
-                    dynamic subscriber = await response.Content.ReadAsAsync<dynamic>();
+                    dynamic subscriber = response.Content.ReadAsAsync<dynamic>().Result;
                     _log.DebugFormat("Code:{0}, Error:{1}", subscriber.Code, subscriber.Error);
                     return subscriber;
                 }
@@ -73,7 +80,7 @@ namespace Moosend.Net.Api
             }
         }
 
-        public async Task<dynamic> Unsubscribe(string email, string mailingListId = "", string campaignId = "")
+        public dynamic Unsubscribe(string email, string mailingListId = "", string campaignId = "")
         {
             try
             {
@@ -90,10 +97,10 @@ namespace Moosend.Net.Api
                     json.CampaignID = campaignId;
                     json.Email = email;
 
-                    HttpResponseMessage response = await MoosendClient.PostAsJsonAsync(webMethodUrl, json);
+                    HttpResponseMessage response = MoosendClient.PostAsJsonAsync(webMethodUrl, json).Result;
                     _log.DebugFormat("Moosend Api call : {0}", response.RequestMessage);
                     _log.DebugFormat("Response : {0}", response.StatusCode);
-                    dynamic subscriber = await response.Content.ReadAsAsync<dynamic>();
+                    dynamic subscriber = response.Content.ReadAsAsync<dynamic>().Result;
                     _log.DebugFormat("Code:{0}, Error:{1}", subscriber.Code, subscriber.Error);
                     return subscriber;
                 }
@@ -105,7 +112,7 @@ namespace Moosend.Net.Api
             }
         }
 
-        public async Task<dynamic> RemoveSubscriber(string email, string mailingListId = "")
+        public dynamic RemoveSubscriber(string email, string mailingListId = "")
         {
             try
             {
@@ -121,10 +128,10 @@ namespace Moosend.Net.Api
                     json.MailingListID = mailingListId;
                     json.Email = email;
 
-                    HttpResponseMessage response = await MoosendClient.PostAsJsonAsync(webMethodUrl, json);
+                    HttpResponseMessage response = MoosendClient.PostAsJsonAsync(webMethodUrl, json).Result;
                     _log.DebugFormat("Moosend Api call : {0}", response.RequestMessage);
                     _log.DebugFormat("Response : {0}", response.StatusCode);
-                    dynamic subscriber = await response.Content.ReadAsAsync<dynamic>();
+                    dynamic subscriber = response.Content.ReadAsAsync<dynamic>().Result;
                     _log.DebugFormat("Code:{0}, Error:{1}", subscriber.Code, subscriber.Error);
                     return subscriber;
                 }
