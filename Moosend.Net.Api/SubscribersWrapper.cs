@@ -47,6 +47,7 @@ namespace Moosend.Net.Api
                 MoosendConfig.MoosendSettings.ApiVersion,
                 MoosendConfig.MoosendSettings.SubscribersRetaliveUri, mailingListId,
                 MoosendConfig.MoosendSettings.ApiKey);
+                webMethodUrl = webMethodUrl.Replace("//", "/");
                 using (base.MoosendClient)
                 {
                     //create json to post
